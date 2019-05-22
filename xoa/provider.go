@@ -1,9 +1,9 @@
 package xoa
 
 import (
-	"github.com/ddelnano/terraform-provider-xenorchestra/client"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/terra-farm/terraform-provider-xenorchestra/client"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -35,6 +35,8 @@ func Provider() terraform.ResourceProvider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"xenorchestra_template": dataSourceXoaTemplate(),
 			"xenorchestra_pif":      dataSourceXoaPIF(),
+			"xenorchestra_host":     dataSourceXoaHost(),
+			"xenorchestra_disk":     dataSourceXoaDisk(),
 		},
 		ConfigureFunc: xoaConfigure,
 	}

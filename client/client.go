@@ -98,6 +98,10 @@ func (c *Client) FindFromGetAllObjects(obj XoObject) (interface{}, error) {
 		xoApiType = "PIF"
 	case Template:
 		xoApiType = "VM-template"
+	case Host:
+		xoApiType = "host"
+	case Disk:
+		xoApiType = "SR"
 	default:
 		panic(fmt.Sprintf("XO client does not support type: %v", t))
 	}
@@ -107,6 +111,7 @@ func (c *Client) FindFromGetAllObjects(obj XoObject) (interface{}, error) {
 	var objsRes struct {
 		Objects map[string]interface{} `json:"-"`
 	}
+
 	ctx, _ := context.WithTimeout(context.Background(), 100*time.Second)
 	err := c.rpc.Call(ctx, "xo.getAllObjects", params, &objsRes.Objects)
 

@@ -44,6 +44,7 @@ func testAccCheckXenorchestraDataSourceTemplate(n string) resource.TestCheckFunc
 
 const testAccXenorchestraDataSourceTemplateConfig = `
 data "xenorchestra_template" "template" {
-    name_label = "Asianux Server 4 (64-bit)"
+	name_label = "Asianux Server 4 (64-bit)"
+	host_uuid
 }
 `

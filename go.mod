@@ -1,4 +1,4 @@
-module github.com/ddelnano/terraform-provider-xenorchestra
+module github.com/terra-farm/terraform-provider-xenorchestra
 
 go 1.12
 

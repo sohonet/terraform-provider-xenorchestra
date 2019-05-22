@@ -1,8 +1,8 @@
 package xoa
 
 import (
-	"github.com/ddelnano/terraform-provider-xenorchestra/client"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/terra-farm/terraform-provider-xenorchestra/client"
 )
 
 func dataSourceXoaPIF() *schema.Resource {
@@ -37,6 +37,10 @@ func dataSourceXoaPIF() *schema.Resource {
 				Type:     schema.TypeInt,
 				Required: true,
 			},
+			"host_id": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -48,11 +52,14 @@ func dataSourcePIFRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-
+	//fmt.Printf("%#v\n\n", d)
 	device := d.Get("device").(string)
 	vlan := d.Get("vlan").(int)
+	host_id := d.Get("host_id").(string)
 
-	pif, err := c.GetPIFByDevice(device, vlan)
+	pif, err := c.GetPIFByDeviceHost(device, vlan, host_id)
+
+	//pif, err := c.GetPIFByDevice(device, vlan)
 
 	if err != nil {
 		return err

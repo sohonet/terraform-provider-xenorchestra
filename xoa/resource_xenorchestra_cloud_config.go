@@ -1,7 +1,7 @@
 package xoa
 
 import (
-	"github.com/ddelnano/terraform-provider-xenorchestra/client"
+	"github.com/terra-farm/terraform-provider-xenorchestra/client"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 

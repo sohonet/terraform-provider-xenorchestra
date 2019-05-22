@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ddelnano/terraform-provider-xenorchestra/xoa"
+	"github.com/terra-farm/terraform-provider-xenorchestra/xoa"
 	"github.com/hashicorp/terraform/plugin"
 )
 

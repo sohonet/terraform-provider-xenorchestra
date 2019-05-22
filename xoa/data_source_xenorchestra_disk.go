@@ -1,23 +1,25 @@
 package xoa
 
 import (
-	"fmt"
-
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/terra-farm/terraform-provider-xenorchestra/client"
 )
 
-func dataSourceXoaTemplate() *schema.Resource {
+func dataSourceXoaDisk() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceTemplateRead,
+		Read: dataSourceDiskRead,
 		Schema: map[string]*schema.Schema{
-			"name_label": &schema.Schema{
+			"name": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"container": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"pool_id": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,
@@ -27,18 +29,17 @@ func dataSourceXoaTemplate() *schema.Resource {
 	}
 }
 
-func dataSourceTemplateRead(d *schema.ResourceData, m interface{}) error {
+func dataSourceDiskRead(d *schema.ResourceData, m interface{}) error {
 	config := m.(client.Config)
 	c, err := client.NewClient(config)
 
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%#v\n\n", d)
-	templateName := d.Get("name_label").(string)
-	hostUUID := d.Get("pool_id").(string)
+	name_label := d.Get("name").(string)
+	host_id := d.Get("container").(string)
 
-	tmpl, err := c.GetTemplate(templateName, hostUUID)
+	dsk, err := c.GetDisk(name_label, host_id)
 
 	if err != nil {
 		return err
@@ -49,8 +50,10 @@ func dataSourceTemplateRead(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
-	d.SetId(tmpl.Id)
-	d.Set("uuid", tmpl.Uuid)
-	d.Set("name_label", tmpl.NameLabel)
+	d.SetId(dsk.Id)
+	d.Set("uuid", dsk.Uuid)
+	d.Set("name", dsk.Name)
+	d.Set("container", dsk.Container)
+	d.Set("pool_id", dsk.PoolId)
 	return nil
 }

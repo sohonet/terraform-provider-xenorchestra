@@ -33,9 +33,9 @@ func TestGetTemplate(t *testing.T) {
 	}
 
 	for _, test := range tests {
-
+		hostUuid := "X"
 		templateName := test.templateName
-		tmp, err := c.GetTemplate(templateName)
+		tmp, err := c.GetTemplate(templateName, hostUuid)
 
 		if test.err != err {
 			t.Errorf("failed to get template `%s` expected err: %v received: %v", templateName, test.err, err)

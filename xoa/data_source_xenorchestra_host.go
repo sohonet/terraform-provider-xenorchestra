@@ -1,23 +1,21 @@
 package xoa
 
 import (
-	"fmt"
-
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/terra-farm/terraform-provider-xenorchestra/client"
 )
 
-func dataSourceXoaTemplate() *schema.Resource {
+func dataSourceXoaHost() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceTemplateRead,
+		Read: dataSourceXoaHostRead,
 		Schema: map[string]*schema.Schema{
-			"name_label": &schema.Schema{
+			"host": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"pool_id": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,
@@ -27,18 +25,17 @@ func dataSourceXoaTemplate() *schema.Resource {
 	}
 }
 
-func dataSourceTemplateRead(d *schema.ResourceData, m interface{}) error {
+func dataSourceXoaHostRead(d *schema.ResourceData, m interface{}) error {
 	config := m.(client.Config)
 	c, err := client.NewClient(config)
 
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%#v\n\n", d)
-	templateName := d.Get("name_label").(string)
-	hostUUID := d.Get("pool_id").(string)
 
-	tmpl, err := c.GetTemplate(templateName, hostUUID)
+	hostname := d.Get("host").(string)
+
+	host, err := c.GetHost(hostname)
 
 	if err != nil {
 		return err
@@ -49,8 +46,9 @@ func dataSourceTemplateRead(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
-	d.SetId(tmpl.Id)
-	d.Set("uuid", tmpl.Uuid)
-	d.Set("name_label", tmpl.NameLabel)
+	d.SetId(host.Uuid)
+	d.Set("host", host.NameLabel)
+	d.Set("pool_id", host.PoolId)
+	d.Set("uuid", host.Uuid)
 	return nil
 }
